@@ -1,5 +1,104 @@
 .App {
   text-align: center;
+  width: 600px;
+  margin: auto;
+  padding-top: 220px;
+}
+
+table {
+  border: 1px black solid;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+table th,
+table td {
+  border: 1px black solid;
+}
+
+table th {
+  background-color: rgb(248, 191, 86);
+}
+
+table tr:nth-child(2n) {
+  background-color: rgb(248, 242, 191);
+}
+
+table th:nth-child(1) {
+  width: 35%;
+}
+
+table th:nth-child(2) {
+  width: 35%;
+}
+
+table th:nth-child(3) {
+  width: 15%;
+}
+
+table th:nth-child(4) {
+  width: 15%;
+}
+
+table tr td:nth-child(1) {
+  width: 35%;
+}
+
+table tr td:nth-child(2) {
+  width: 35%;
+}
+
+table tr td:nth-child(3) {
+  width: 15%;
+}
+
+table tr td:nth-child(4) {
+  width: 15%;
+}
+
+.pagination {
+  display: flex;
+  list-style-type: none;
+  width: 30%;
+  margin: 20px auto 0;
+  justify-content: center;
+  padding-left: 0;
+}
+
+.pagination li {
+  margin: 0 5px;
+  cursor: pointer;
+}
+
+.pagination li a {
+  outline: none;
+}
+
+.pagination li.active {
+  text-decoration: underline;
+}
+
+.page-size {
+  margin-top: 20px;
+}
+
+.page-size span {
+  margin: 0 3px;
+  cursor: pointer;
+}
+
+.filter {
+  margin-top: 20px;
+}
+
+.filter select {
+  margin: 0 3px;
+}
+
+.bottom-wrap {
+  display: flex;
+  justify-content: space-between;
+  padding: 0 20px;
 }
 
 .App-logo {
@@ -32,6 +131,7 @@
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(360deg);
   }
