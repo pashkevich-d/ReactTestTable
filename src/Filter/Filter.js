@@ -46,6 +46,18 @@ export default class Filter extends React.Component {
 
     const uniqueYear = this.getUnique(data, "year");
     const uniqueCouse = this.getUnique(data, "ganre");
+    const uniqueGanres = [];
+    const uniqueYears = [];
+    
+    uniqueCouse.map(song => {
+      uniqueGanres.push(song.ganre)
+    })
+    uniqueGanres.sort()
+
+    uniqueYear.map(song => {
+      uniqueYears.push(song.year)
+    })
+    uniqueYears.sort()
     
 
         return (<div className="filter">
@@ -54,10 +66,10 @@ export default class Filter extends React.Component {
                   onChange={event=>this.props.setSelectedGanre(event.target.value)}
                 >
                   <option value="all">All</option>
-                  {uniqueCouse.map(course => (
-                    <option key={course.id} value={course.ganre}>
+                  {uniqueGanres.map((ganre,id) => (
+                    <option key={id} value={ganre}>
                         
-                      {course.ganre}
+                      {ganre}
                     </option>
                   ))}
                 </select>
@@ -69,10 +81,10 @@ export default class Filter extends React.Component {
                     // onChange={this.setYear}
                 >
                   <option value="all">All</option>
-                  {uniqueYear.map(course => (
-                    <option key={course.id} value={course.year}>
+                  {uniqueYears.map((year,id) => (
+                    <option key={id} value={year}>
                         
-                      {course.year}
+                      {year}
                     </option>
                   ))}
                 </select>

@@ -1,11 +1,9 @@
 import React, { Component } from "react";
-import ReactPaginate from "react-paginate";
 import "./App.css";
 import Loader from "./Loader/Loader";
-import Table from "./Table/Table";
-import _ from "lodash";
+import Table1 from "./Table/Table1";
 import Filter from './Filter/Filter';
-import FilteredData from './FilteredData/FilteredData';
+import Pagination from './Pagination/Pagination';
 
 class App extends Component {
   state = {
@@ -13,13 +11,11 @@ class App extends Component {
     data: [],
     sort: " asc",
     sortField: "singer",
-    currentPage: 0,
-    rowsToDisplay: 3,
+    currentPage: 1,
+    rowsToDisplay: 5,
     selectedGanre: "all",
     selectedYear: "all"
   };
-
-
 
   async componentDidMount() {
     const response = await fetch("./songs.json");
@@ -27,112 +23,100 @@ class App extends Component {
 
     this.setState({
       isLoading: false,
-      data: _.orderBy(data, this.state.sortField, this.state.sort)
+      data
     });
   }
 
-  onSort = sortField => {
-    const clonedData = this.state.data.concat();
-    const sortType = this.state.sort === "asc" ? "desc" : 'asc';
-
-    const orderedData = _.orderBy(clonedData, sortField, sortType);
-
-    this.setState({
-      data: orderedData,
-      sort: sortType,
-      sortField
-    });
-  };
-
-  pageChangeHandler = ({ selected }) => {
-    this.setState({
-      currentPage: selected
-    });
-  };
-
-  changeDisplayedItems = count => {
-    this.setState({
-      pageRangeDisplayed: count
-    });
-  };
+  
 
   setSelectedGanre = ganre => {
-    this.setState({selectedGanre: ganre});
-    // console.log(this.state.selectedGanre)
+    this.setState({
+      selectedGanre: ganre})
+      // data: this.state.data.filter(song=>(
+      //   song.ganre == ganre
+      // ))
   }
 
   setSelectedYear = year => {
     this.setState({selectedYear: year});
   }
 
+  filterData = (data, ganre, year)=> {
+    if(ganre==='all'&&year==="all"){
+      return data
+    } else if (ganre!=='all'&&year==="all"){
+      return data.filter(song=> (
+        song.ganre ==ganre
+      ))
+    } else if(ganre==='all'&&year!=="all"){
+      return data.filter(song=> (
+        song.year ==year
+      ))
+    } else if(ganre!=='all'&&year!=="all"){
+      return data.filter(song=> (
+        song.year ==year
+      )).filter(song=>(
+        song.ganre==ganre
+      ))
+    }
+  }
+
+  sortBy = (key) =>{
+    this.state.sort === 'asc' ? this.setState({
+      data: this.state.data.sort(function(a,b){
+        
+        if(a[key] < b[key]) return 1;
+        if(a[key] > b[key]) return -1;
+        return 0;
+      }),
+      sort: this.state.sort === 'asc' ? 'desc' : 'asc'
+    }) : this.setState({
+      data: this.state.data.sort(function(a,b){
+        
+        if(a[key] < b[key]) return -1;
+        if(a[key] > b[key]) return 1;
+        return 0;
+      }),
+      sort: this.state.sort === 'asc' ? 'desc' : 'asc'
+    })
+  }
+
   render() {
-    const displayData = _.chunk(this.state.data, this.state.rowsToDisplay)[
-      this.state.currentPage
-    ];
 
-    const pageCount = Math.ceil(
-      this.state.data.length / this.state.rowsToDisplay
-    );
-
+    const filteredData = this.filterData(this.state.data, this.state.selectedGanre, this.state.selectedYear);
     
+    const indexOfLastPost = this.state.currentPage *this.state.rowsToDisplay;
+    const indexOfFirstPost = indexOfLastPost - this.state.rowsToDisplay;
+    const currentRows = filteredData.slice(indexOfFirstPost,indexOfLastPost);
     
+    const paginate = (pageNumber) => {
+      this.setState({currentPage: pageNumber})
+    }
 
     return (
       <div className="App">
+       
         
         {this.state.isLoading ? (
           <Loader />
-        ) : <div className="content-wrap">
-          {this.state.selectedYear==='all'&& this.state.selectedGanre==='all'
-              ? <React.Fragment> 
-              <Table
-                onSort={this.onSort}
-                data={displayData}
-                sort={this.state.sort}
-                sortField={this.state.sortField}
-              />     
-                
-              {this.state.data.length > 3 ? (
-                <React.Fragment> 
-                  <ReactPaginate
-                    itemsCountPerPage={"3"}
-                    previousLabel={"<"}
-                    nextLabel={">"}
-                    breakLabel={"..."}
-                    breakClassName={"break-me"}
-                    pageCount={pageCount}
-                    marginPagesDisplayed={4}
-                    pageRangeDisplayed={6}
-                    onPageChange={this.pageChangeHandler}
-                    containerClassName={"pagination"}
-                    activeClassName={"active"}
-                    forcePage={this.state.currentPage}
-                  />
-                  <div className="bottom-wrap">
-                  <div className="page-size">
-                    Songs to show:
-                    <span onClick={() => this.setState({ rowsToDisplay: 3 })}>3</span>
-                    <span onClick={() => this.setState({ rowsToDisplay: 5 })}>5</span>
-                    <span onClick={() => this.setState({ rowsToDisplay: 10 })}>
-                      10
-                    </span>
-                  </div>
-                  <Filter data={this.state.data} setSelectedGanre={this.setSelectedGanre} setSelectedYear={this.setSelectedYear} year={this.state.selectedYear} ganre={this.state.selectedGanre}/>
-                  </div>
-                  </React.Fragment> )
-                  : null}   
-                  
-                </React.Fragment>
-                
-                             
-            : <React.Fragment>
-            <FilteredData data={this.state.data} year={this.state.selectedYear} ganre={this.state.selectedGanre}/>
-            <Filter data={this.state.data} setSelectedGanre={this.setSelectedGanre} setSelectedYear={this.setSelectedYear} year={this.state.selectedYear} ganre={this.state.selectedGanre}/>
-            </React.Fragment>
-        } </div>}
-       
+        ) : <>
+          <Table1 data={currentRows} sortBy={this.sortBy}/>
+          <Pagination postsPerPage={this.state.rowsToDisplay} totalPosts={this.state.data.length} paginate={paginate} currentPage={this.state.currentPage}/>
+          <div className="page-size">
+                Songs to show:
+                <span className={this.state.rowsToDisplay ===3 ?'active-button': null} onClick={() => this.setState({ rowsToDisplay: 3 })}>3</span>
+                <span className={this.state.rowsToDisplay ===5 ?'active-button': null} onClick={() => this.setState({ rowsToDisplay: 5 })}>5</span>
+                <span className={this.state.rowsToDisplay ===10 ?'active-button': null} onClick={() => this.setState({ rowsToDisplay: 10 })}>
+                  10
+                </span>
+              </div>
+          
+          <Filter data={this.state.data} setSelectedGanre={this.setSelectedGanre} setSelectedYear={this.setSelectedYear} year={this.state.selectedYear} ganre={this.state.selectedGanre}/>
+        </>}
+        
+      
       </div>
-    );
+    )
   }
 }
 

@@ -70,8 +70,19 @@ table tr td:nth-child(4) {
   cursor: pointer;
 }
 
+.pagination a.active-page {
+  /* text-decoration: underline; */
+  font-weight: 700;
+}
+
+.active-button {
+  font-weight: 700;
+}
+
 .pagination li a {
   outline: none;
+  text-decoration: none;
+  color: black;
 }
 
 .pagination li.active {
