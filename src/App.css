@@ -70,7 +70,7 @@ table tr td:nth-child(4) {
   cursor: pointer;
 }
 
-.pagination a.active-page {
+.pagination span.active-page {
   /* text-decoration: underline; */
   font-weight: 700;
 }

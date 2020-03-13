@@ -100,7 +100,7 @@ class App extends Component {
         {this.state.isLoading ? (
           <Loader />
         ) : <>
-          <Table1 data={currentRows} sortBy={this.sortBy}/>
+          <Table1 data={currentRows} sort={this.state.sort} sortBy={this.sortBy}/>
           <Pagination postsPerPage={this.state.rowsToDisplay} totalPosts={this.state.data.length} paginate={paginate} currentPage={this.state.currentPage}/>
           <div className="page-size">
                 Songs to show:
