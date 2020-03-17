@@ -58,12 +58,22 @@ export default class Filter extends React.Component {
       uniqueYears.push(song.year)
     })
     uniqueYears.sort()
+
+    const handleGanreChange = (e) => {
+      this.props.setSelectedGanre(e);
+      this.props.paginate(1)
+    }
+
+    const handleYearChange = (e) => {
+      this.props.setSelectedYear(e);
+      this.props.paginate(1)
+    }
     
 
         return (<div className="filter">
                 <select className="select"
                   value={this.props.ganre}
-                  onChange={event=>this.props.setSelectedGanre(event.target.value)}
+                  onChange={event=>handleGanreChange(event.target.value)}
                 >
                   <option value="all">All</option>
                   {uniqueGanres.map((ganre,id) => (
@@ -77,8 +87,7 @@ export default class Filter extends React.Component {
               <select
               className="select"
                   value={this.props.year}
-                    onChange={event=>this.props.setSelectedYear(event.target.value)}
-                    // onChange={this.setYear}
+                    onChange={event=>handleYearChange(event.target.value)}
                 >
                   <option value="all">All</option>
                   {uniqueYears.map((year,id) => (

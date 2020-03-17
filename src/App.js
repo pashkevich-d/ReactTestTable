@@ -32,9 +32,6 @@ class App extends Component {
   setSelectedGanre = ganre => {
     this.setState({
       selectedGanre: ganre})
-      // data: this.state.data.filter(song=>(
-      //   song.ganre == ganre
-      // ))
   }
 
   setSelectedYear = year => {
@@ -104,14 +101,14 @@ class App extends Component {
           <Pagination postsPerPage={this.state.rowsToDisplay} totalPosts={this.state.data.length} paginate={paginate} currentPage={this.state.currentPage}/>
           <div className="page-size">
                 Songs to show:
-                <span className={this.state.rowsToDisplay ===3 ?'active-button': null} onClick={() => this.setState({ rowsToDisplay: 3 })}>3</span>
-                <span className={this.state.rowsToDisplay ===5 ?'active-button': null} onClick={() => this.setState({ rowsToDisplay: 5 })}>5</span>
-                <span className={this.state.rowsToDisplay ===10 ?'active-button': null} onClick={() => this.setState({ rowsToDisplay: 10 })}>
+                <span className={this.state.rowsToDisplay ===3 ?'active-button': null} onClick={() => this.setState({ rowsToDisplay: 3, currentPage: 1 })}>3</span>
+                <span className={this.state.rowsToDisplay ===5 ?'active-button': null} onClick={() => this.setState({ rowsToDisplay: 5, currentPage: 1 })}>5</span>
+                <span className={this.state.rowsToDisplay ===10 ?'active-button': null} onClick={() => this.setState({ rowsToDisplay: 10, currentPage: 1 })}>
                   10
                 </span>
               </div>
           
-          <Filter data={this.state.data} setSelectedGanre={this.setSelectedGanre} setSelectedYear={this.setSelectedYear} year={this.state.selectedYear} ganre={this.state.selectedGanre}/>
+          <Filter paginate={paginate} data={this.state.data} setSelectedGanre={this.setSelectedGanre} setSelectedYear={this.setSelectedYear} year={this.state.selectedYear} ganre={this.state.selectedGanre}/>
         </>}
         
       
