@@ -20,6 +20,7 @@ class App extends Component {
   async componentDidMount() {
     const response = await fetch("./songs.json");
     const data = await response.json();
+    console.log(data)
 
     this.setState({
       isLoading: false,
@@ -98,7 +99,7 @@ class App extends Component {
           <Loader />
         ) : <>
           <Table1 data={currentRows} sort={this.state.sort} sortBy={this.sortBy}/>
-          <Pagination postsPerPage={this.state.rowsToDisplay} totalPosts={this.state.data.length} paginate={paginate} currentPage={this.state.currentPage}/>
+          <Pagination postsPerPage={this.state.rowsToDisplay} totalPosts={filteredData.length} paginate={paginate} currentPage={this.state.currentPage}/>
           <div className="page-size">
                 Songs to show:
                 <span className={this.state.rowsToDisplay ===3 ?'active-button': null} onClick={() => this.setState({ rowsToDisplay: 3, currentPage: 1 })}>3</span>
